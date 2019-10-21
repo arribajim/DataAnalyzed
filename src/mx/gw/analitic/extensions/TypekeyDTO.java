@@ -5,7 +5,7 @@ public class TypekeyDTO extends EntityDTO{
 	public String toString() {
 //		return "TypekeyDTO [code=" + code + ", getEntityName()=" + getEntityName() + ", getTag()=" + getTag()
 //				+ ", getName()=" + getName() + ", getDescription()=" + getDescription() + "]";
-		return  getEntityName()+ "\t" + getTag()+"\t" + code + "\t" + getName()+ "\t" + getDescription();
+		return  (isNew()?"NEW":"EDITED")+ "\t" +getEntityName()+ "\t" + getTag()+"\t" + code + "\t" + getName()+ "\t" + getDescription();
 	}
 
 	private String code;

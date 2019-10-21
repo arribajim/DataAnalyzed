@@ -2,6 +2,7 @@ package mx.gw.analitic.extensions;
 
 public class EntityDTO {
 	private String entityName;
+	private boolean isNew;
 	/**
 	 * @return the entityName
 	 */
@@ -50,7 +51,7 @@ public class EntityDTO {
 	@Override
 	public String toString() {
 //		return "EntityDTO [entityName=" + entityName + ", tag=" + tag + ", name=" + name + "]";
-		return  entityName + "\t" + tag + "\t" + name+ "\t" + description ;
+		return  (isNew?"NEW":"EDITED")+ "\t" +entityName + "\t" + tag + "\t" + name+ "\t" + description ;
 	}
 	/**
 	 * @return the tag
@@ -87,5 +88,17 @@ public class EntityDTO {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	/**
+	 * @return the isNew
+	 */
+	public boolean isNew() {
+		return isNew;
+	}
+	/**
+	 * @param isNew the isNew to set
+	 */
+	public void setNew(boolean isNew) {
+		this.isNew = isNew;
 	}
 }
