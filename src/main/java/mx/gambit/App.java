@@ -3,8 +3,10 @@ package mx.gambit;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -21,11 +23,14 @@ public class App {
 	public static void main(String[] args) {
 
 		try {
-			readFromFile();
+			
+			new SaveFromURL("https://trailhead.salesforce.com/en/modules");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		System.out.println("done");
 
 	}
 
