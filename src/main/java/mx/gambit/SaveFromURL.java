@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.text.DateFormat;
 import java.util.Calendar;
 
 import org.springframework.util.FileCopyUtils;
@@ -14,6 +13,7 @@ public class SaveFromURL {
 	
 	private String url;
 	private String fileOutput;
+	private File file;
 	
 	public SaveFromURL(String url) throws Exception {
 		// TODO Auto-generated constructor stub
@@ -40,7 +40,7 @@ public class SaveFromURL {
 		FileCopyUtils.copy(bos.toByteArray(), output);
 		
 		close(is,bos);//TODO check if this fail
-		
+		setFile(output);
 	}
 	
 	
@@ -66,6 +66,7 @@ public class SaveFromURL {
 	public String getFileOutput() {
 		if(fileOutput==null) {
 			fileOutput = "raw_"+Calendar.getInstance().getTimeInMillis();
+			setFileOutput(fileOutput);
 		}
 		return fileOutput;
 	}
@@ -74,5 +75,17 @@ public class SaveFromURL {
 	 */
 	public void setFileOutput(String fileOutput) {
 		this.fileOutput = fileOutput;
+	}
+	/**
+	 * @return the file
+	 */
+	public File getFile() {
+		return file;
+	}
+	/**
+	 * @param file the file to set
+	 */
+	public void setFile(File file) {
+		this.file = file;
 	}
 }
