@@ -1,14 +1,18 @@
 package mx.gambit.parcer;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import mx.gambit.bean.Event;
+import mx.gambit.bean.Gambit;
 import mx.gambit.bean.Game;
-import mx.gambit.bean.League;
 import mx.gambit.bean.Participant;
 import mx.gambit.bean.Result;
 
@@ -17,6 +21,7 @@ public class ParceEventsJson {
 	private ArrayList<Game> gameList;
 	private ArrayList<Result> resultList;
 	private ArrayList<Participant> participantList;
+	private ArrayList<Gambit> gambitList;
 	
 	@SuppressWarnings("unchecked")
 	public void parceEvents(Object obj) {
@@ -39,6 +44,40 @@ public class ParceEventsJson {
 		});		
 	}
 	
+	@SuppressWarnings("unchecked")
+	public void parceGambit(String jsonFilePath,long createJsonFile) throws IOException, ParseException {
+		JSONParser jsonParser = new JSONParser();              
+    	FileReader reader = new FileReader(jsonFilePath);
+    	Object obj = jsonParser.parse(reader);    
+		JSONArray events = (JSONArray) obj;
+		gambitList = new ArrayList<Gambit>();		
+		events.forEach( event ->{
+			JSONArray games = (JSONArray) ((JSONObject)event).get("Games");
+			games.forEach(part ->{
+				JSONArray results = (JSONArray) ((JSONObject)part).get("Results");
+				results.forEach(result ->{
+					parceGambit((JSONObject)result);
+				});
+			});
+		});
+		
+		gambitList.forEach(elt->{
+			 elt.setDateOfGambitCheck(createJsonFile);
+			 if(elt.getParentNodeId().equals("2601345415")) {
+				 System.out.println(elt.sqlInsert());
+			 }
+         	
+         });
+	}
+	
+	private void parceGambit(JSONObject jsonObject) {
+		// TODO Auto-generated method stub		
+		Gambit gambit = new Gambit();		
+		gambit.setParentNodeId( jsonObject.get("NodeId").toString());//from results nodes only need historic info
+		gambit.setOdd( Double.parseDouble(jsonObject.get("Odd").toString()));		
+        gambitList.add(gambit);
+	}
+
 	@SuppressWarnings("unchecked")
 	public void parceResults(Object obj) {
 		JSONArray events = (JSONArray) obj;
@@ -63,7 +102,7 @@ public class ParceEventsJson {
 		result.setName( jsonObject.get("Name").toString());
 		result.setPriority( Integer.parseInt(jsonObject.get("Priority").toString()));
 		result.setParentNodeId( jsonObject.get("ParentNodeId").toString());
-		result.setOdd( jsonObject.get("Odd").toString());
+		result.setOdd( Double.parseDouble(jsonObject.get("Odd").toString()));
 		result.setLocked( Boolean.parseBoolean(jsonObject.get("Locked").toString()));
         resultList.add(result);
 	}
@@ -83,8 +122,7 @@ public class ParceEventsJson {
 	private void parceParticipant(JSONObject jsonObject, JSONObject event) {
 		//Get jsonObject object within list     
 			Participant part = new Participant();
-			part.setNodeId( jsonObject.get("Id").toString());	                
-	        part.setIsHome(Boolean.parseBoolean(jsonObject.get("IsHome").toString()));
+			part.setNodeId( jsonObject.get("Id").toString());	                	        
 	        part.setParentNodeId(event.get("ParentNodeId").toString());
 	        //TODO move 
 	        part.setName(parceName((JSONObject) jsonObject,"LocalizedNames"));	        

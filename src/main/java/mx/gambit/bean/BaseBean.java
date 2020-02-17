@@ -57,4 +57,10 @@ public class BaseBean {
 	public String toString() {
 		return NodeId +", "+ Name+", "+Priority+", "+ParentNodeId;
 	}
+	public String sqlInsert() {
+		String sql =String.format
+        		("insert into TABLE_XX values ( %s, \'%s\', \'%s\', %s);",
+        				NodeId,Name,Priority,ParentNodeId);
+		return sql;
+	}
 }

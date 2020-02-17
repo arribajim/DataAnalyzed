@@ -7,12 +7,18 @@ public class Game extends BaseBean{
 	private String eventNodeTypeId;	
 	private String sportHandle;
 	private String childrenCount;
-	private boolean locked;
+	private boolean Locked;
 	private Result result[];
 	
 	public String toString() {
 		return NodeId +", "+ Name+", "+Priority+", "+ParentNodeId
-				+", "+locked;
+				+", "+Locked;
+	}
+	public String sqlInsert() {
+		String sql =String.format
+        		("insert into games values ( %s, \'%s\',%s, %s, %s);",
+        				NodeId,Name,Priority,Locked,ParentNodeId);
+		return sql;
 	}
 	/**
 	 * @return the displayTypeName
@@ -92,13 +98,13 @@ public class Game extends BaseBean{
 	 * @return the locked
 	 */
 	public boolean isLocked() {
-		return locked;
+		return Locked;
 	}
 	/**
 	 * @param locked the locked to set
 	 */
 	public void setLocked(boolean locked) {
-		this.locked = locked;
+		this.Locked = locked;
 	}
 	/**
 	 * @return the result

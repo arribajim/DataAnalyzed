@@ -1,16 +1,24 @@
 package mx.gambit.bean;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Event extends BaseBean{
 	private Boolean Locked;
-	private Date StarDate;
+	private Date StarDate;	
 	private String StatisticsId;
 	
 
 	public String toString() {
 		return NodeId +", "+ Name+", "+Priority+", "+ParentNodeId
 				+", "+Locked+", "+StarDate+", "+StatisticsId;
+	}
+	
+	public String sqlInsert() {
+		String sql =String.format
+        		("insert into events values ( %s, \'%s\',\'%s\', %s, %s, \'%s\', %s);",
+        				NodeId,Name,getTimeStampFormat(),Priority,Locked,StatisticsId,ParentNodeId);
+		return sql;
 	}
 	/**
 	 * @return the locked
@@ -51,4 +59,14 @@ public class Event extends BaseBean{
 	public void setStatisticsId(String statisticsId) {
 		StatisticsId = statisticsId;
 	}
+
+	/**
+	 * @return the timeStampFormat
+	 */
+	public String getTimeStampFormat() {
+		String pattern = "yyyy-MM-dd HH:mm:ss.SSS";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		return simpleDateFormat.format(StarDate);
+	}
+	 
 }
