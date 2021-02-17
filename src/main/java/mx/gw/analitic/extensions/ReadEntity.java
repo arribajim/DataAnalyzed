@@ -7,10 +7,10 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 public class ReadEntity {
-	private static final String HOME_GW="C:\\Guidewire\\AXA\\ClaimCenter\\modules\\";
-	private static final String HOME_GW_MOD="C:\\Guidewire\\AXA\\ClaimCenter\\modules\\";//"C:\\Guidewire\\multiasistencia\\sf\\ClaimCenter\\modules\\";
+	private static final String HOME_GW="C:\\Guidewire\\ClaimCenter\\modules\\";
+	private static final String HOME_GW_MOD="C:\\Guidewire\\ClaimCenter\\modules\\";
 	private static final String EXTENSIONS_BASE_DIR=HOME_GW+"base\\base\\config\\extensions\\";
-	private static final String EXTENSIONS_AXA_DIR=HOME_GW_MOD+"configuration\\config\\extensions\\";
+	private static final String EXTENSIONS_DIR=HOME_GW_MOD+"configuration\\config\\extensions\\";
 	private static final String ENTITY="entity";
 	private static final String TYPELIST="typelist";
 	
@@ -18,7 +18,7 @@ public class ReadEntity {
 		try {// TODO Auto-generated method stub
 			System.out.println("entityName\ttag\tname\tdescription");
 			File dirBaseEntity = new File(EXTENSIONS_BASE_DIR+ENTITY);
-			File dirModEntity = new File(EXTENSIONS_AXA_DIR+ENTITY);
+			File dirModEntity = new File(EXTENSIONS_DIR+ENTITY);
 			
 			ArrayList<String> news = getNewsEntities(dirBaseEntity,dirModEntity); 
 				
@@ -32,7 +32,7 @@ public class ReadEntity {
 			}
 			//typelist
 			File dirBaseTypelist = new File(EXTENSIONS_BASE_DIR+TYPELIST);
-			File dirModTypelist = new File(EXTENSIONS_AXA_DIR+TYPELIST);
+			File dirModTypelist = new File(EXTENSIONS_DIR+TYPELIST);
 			
 			
 			System.out.println("\n\\n\\nTypekeyName\ttag\tcode\tname\tdescription");
@@ -41,11 +41,11 @@ public class ReadEntity {
 				isNewTypeList(s,dirModTypelist);
 			}
 			for(File f:dirBaseTypelist.listFiles()) {
-				for(File fAxa:dirModTypelist.listFiles()) {
+				for(File fchild:dirModTypelist.listFiles()) {
 					//modified
-					if(f.getName().equals(fAxa.getName())) {						
+					if(f.getName().equals(fchild.getName())) {						
 						ArrayList<TypekeyDTO> lst1 = getTypekeyList(f);
-						ArrayList<TypekeyDTO> lst2 = getTypekeyList(fAxa);
+						ArrayList<TypekeyDTO> lst2 = getTypekeyList(fchild);
 						if(lst2.removeAll(lst1)) {
 							for(TypekeyDTO o:lst2) {
 								System.out.println(o);
@@ -66,9 +66,9 @@ public class ReadEntity {
 	
 	private static void isNewTypeList(String s, File dirModEntity) throws ParserConfigurationException, SAXException, IOException {
 		// TODO Auto-generated method stub
-		for(File fAxa:dirModEntity.listFiles()) {					 
-			if(s.equals(fAxa.getName())) {				
-				ArrayList<TypekeyDTO> lst2 = getTypekeyList(fAxa);				
+		for(File fchild:dirModEntity.listFiles()) {					 
+			if(s.equals(fchild.getName())) {				
+				ArrayList<TypekeyDTO> lst2 = getTypekeyList(fchild);				
 					for(TypekeyDTO o:lst2) {
 						o.setNew(true);
 					System.out.println(o.toString());
@@ -79,9 +79,9 @@ public class ReadEntity {
 
 	private static void isNew(String s, File dirModEntity) throws ParserConfigurationException, SAXException, IOException {
 		// TODO Auto-generated method stub
-		for(File fAxa:dirModEntity.listFiles()) {					 
-			if(s.equals(fAxa.getName())) {				
-				ArrayList<EntityDTO> lst2 = getEntityList(fAxa);				
+		for(File fchild:dirModEntity.listFiles()) {					 
+			if(s.equals(fchild.getName())) {				
+				ArrayList<EntityDTO> lst2 = getEntityList(fchild);				
 					for(EntityDTO o:lst2) {
 						o.setNew(true);
 					System.out.println(o.toString());
@@ -102,11 +102,11 @@ public class ReadEntity {
 	}
 
 	private static void isModified(File f) throws ParserConfigurationException, SAXException, IOException {			
-		for(File fAxa:new File(EXTENSIONS_AXA_DIR+ENTITY).listFiles()) {
+		for(File fchild:new File(EXTENSIONS_DIR+ENTITY).listFiles()) {
 			//MODIFIED ENTITIES OOTB
-			if(f.getName().equals(fAxa.getName())) {				
+			if(f.getName().equals(fchild.getName())) {				
 				ArrayList<EntityDTO> lst1 = getEntityList(f);
-				ArrayList<EntityDTO> lst2 = getEntityList(fAxa);				
+				ArrayList<EntityDTO> lst2 = getEntityList(fchild);				
 				if(lst2.removeAll(lst1)) {
 					for(EntityDTO o:lst2) {
 						System.out.println(o);
